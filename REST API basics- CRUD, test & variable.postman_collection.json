@@ -1,0 +1,1483 @@
+{
+	"info": {
+		"_postman_id": "09efc312-a12c-49fd-8d1b-74f4adeeecd9",
+		"name": "REST API basics: CRUD, test & variable",
+		"description": "# 🚀 Get started here\n\nThis template guides you through CRUD operations (GET, POST, PUT, DELETE), variables, and tests.\n\n## 🔖 **How to use this template**\n\n#### **Step 1: Send requests**\n\nRESTful APIs allow you to perform CRUD operations using the POST, GET, PUT, and DELETE HTTP methods.\n\nThis collection contains each of these [request](https://learning.postman.com/docs/sending-requests/requests/) types. Open each request and click \"Send\" to see what happens.\n\n#### **Step 2: View responses**\n\nObserve the response tab for status code (200 OK), response time, and size.\n\n#### **Step 3: Send new Body data**\n\nUpdate or add new data in \"Body\" in the POST request. Typically, Body data is also used in PUT request.\n\n```\n{\n    \"name\": \"Add your name in the body\"\n}\n\n ```\n\n#### **Step 4: Update the variable**\n\nVariables enable you to store and reuse values in Postman. We have created a [variable](https://learning.postman.com/docs/sending-requests/variables/) called `base_url` with the sample request [https://postman-api-learner.glitch.me](https://postman-api-learner.glitch.me). Replace it with your API endpoint to customize this collection.\n\n#### **Step 5: Add tests in the \"Tests\" tab**\n\nTests help you confirm that your API is working as expected. You can write test scripts in JavaScript and view the output in the \"Test Results\" tab.\n\n<img src=\"https://content.pstmn.io/b5f280a7-4b09-48ec-857f-0a7ed99d7ef8/U2NyZWVuc2hvdCAyMDIzLTAzLTI3IGF0IDkuNDcuMjggUE0ucG5n\">\n\n## 💪 Pro tips\n\n- Use folders to group related requests and organize the collection.\n- Add more [scripts](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/) in \"Tests\" to verify if the API works as expected and execute workflows.\n    \n\n## 💡Related templates\n\n[API testing basics](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9a37a28-055b-49cd-8c7e-97494a21eb54&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[API documentation](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9c28f47-1253-44af-a2f3-20dce4da1f18&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[Authorization methods](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=31a9a6ed-4cdf-4ced-984c-d12c9aec1c27&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30924210"
+	},
+	"item": [
+		{
+			"name": "wishlist-stock-trade",
+			"item": [
+				{
+					"name": "addstockitem",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTkyMGU5MDRhMDExMzU5MzIxYzIwNyIsImlhdCI6MTcxOTY0OTMzMCwiZXhwIjoxNzE5ODIyMTMwfQ.x3zRumI8xZmAqnQAECr2RHerY5JzjNKNICAyvfrJAEc",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"itemType\": \"MCX\",\n  \"symbol\": \"GOLD\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/var/wishlist/add-item/665920e904a011359321c207",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"var",
+								"wishlist",
+								"add-item",
+								"665920e904a011359321c207"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addmcxitem",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTkyMGU5MDRhMDExMzU5MzIxYzIwNyIsImlhdCI6MTcxOTY0OTMzMCwiZXhwIjoxNzE5ODIyMTMwfQ.x3zRumI8xZmAqnQAECr2RHerY5JzjNKNICAyvfrJAEc",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"itemType\": \"MCX\",\n  \"symbol\": \"GOLD\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/var/wishlist/add-item/665920e904a011359321c207",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"var",
+								"wishlist",
+								"add-item",
+								"665920e904a011359321c207"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Getwishlist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/var/wishlist/get-wishlist/665920e904a011359321c207",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"var",
+								"wishlist",
+								"get-wishlist",
+								"665920e904a011359321c207"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "removewishlist-item",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful DELETE request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 202, 204]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/var/wishlist/remove-item/665920e904a011359321c207/667fc4d1ad642f0e6e1876d9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"var",
+								"wishlist",
+								"remove-item",
+								"665920e904a011359321c207",
+								"667fc4d1ad642f0e6e1876d9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addtrade",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTkyMGU5MDRhMDExMzU5MzIxYzIwNyIsImlhdCI6MTcxOTY0OTMzMCwiZXhwIjoxNzE5ODIyMTMwfQ.x3zRumI8xZmAqnQAECr2RHerY5JzjNKNICAyvfrJAEc",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"symbol\": \"AAPL\",\n  \"tradeType\": \"buy\",\n  \"tradePrice\": 150.75,\n  \"quantity\": 10\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/var/trade/add-trade/665920e904a011359321c207",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"var",
+								"trade",
+								"add-trade",
+								"665920e904a011359321c207"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "loginmasteradmin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTkyMGU5MDRhMDExMzU5MzIxYzIwNyIsImlhdCI6MTcyMDMzOTY0NiwiZXhwIjoxNzIwNTEyNDQ2fQ.4DCFgdDklrjYDzwff0yEdg8-Diz1FHbD-Sdfi_YKd-Q",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"symbol\": \"AAPL\",\n  \"bidPrice\": 150.75,\n  \"quantity\": 10\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/var/bid/add-bid/665920e904a011359321c207",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"var",
+								"bid",
+								"add-bid",
+								"665920e904a011359321c207"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "loginmasteradmin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTkyMGU5MDRhMDExMzU5MzIxYzIwNyIsImlhdCI6MTcyMDMzOTY0NiwiZXhwIjoxNzIwNTEyNDQ2fQ.4DCFgdDklrjYDzwff0yEdg8-Diz1FHbD-Sdfi_YKd-Q",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"symbol\": \"AAPL\",\n  \"stopLossPrice\": 145.50,\n  \"quantity\": 10\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/var/stoploos/add-stopLoss/665920e904a011359321c207",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"var",
+								"stoploos",
+								"add-stopLoss",
+								"665920e904a011359321c207"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get-Stoploss",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTkyMGU5MDRhMDExMzU5MzIxYzIwNyIsImlhdCI6MTcyMDMzOTY0NiwiZXhwIjoxNzIwNTEyNDQ2fQ.4DCFgdDklrjYDzwff0yEdg8-Diz1FHbD-Sdfi_YKd-Q",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/var/stoploos/get-stopLosses/665920e904a011359321c207",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"var",
+								"stoploos",
+								"get-stopLosses",
+								"665920e904a011359321c207"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get-trade",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTkyMGU5MDRhMDExMzU5MzIxYzIwNyIsImlhdCI6MTcyMDMzOTY0NiwiZXhwIjoxNzIwNTEyNDQ2fQ.4DCFgdDklrjYDzwff0yEdg8-Diz1FHbD-Sdfi_YKd-Q",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/var/trade/get-trades/665920e904a011359321c207",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"var",
+								"trade",
+								"get-trades",
+								"665920e904a011359321c207"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get-bid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTkyMGU5MDRhMDExMzU5MzIxYzIwNyIsImlhdCI6MTcyMDMzOTY0NiwiZXhwIjoxNzIwNTEyNDQ2fQ.4DCFgdDklrjYDzwff0yEdg8-Diz1FHbD-Sdfi_YKd-Q",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/var/bid/get-bids/665920e904a011359321c207",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"var",
+								"bid",
+								"get-bids",
+								"665920e904a011359321c207"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/info?id=1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"info"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				},
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
+		},
+		{
+			"name": "Post data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDlkYWYwNThlYTg3MjAxMzE3MDNhNCIsImlhdCI6MTcxNjExOTEyMSwiZXhwIjoxNzE2MjkxOTIxfQ.qttb1NZ6RrqnMQpFluInBFAzVKrKtp66cGwDIsUFeH0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"masteradmin1\",\n  \"password\": \"masteradmin@123\",\n  \"budget\": 5000000,\n  \"availableBudget\": 4500000,\n  \"allotedBudget\": 500000,\n  \"status\": \"active\",\n  \"masterCode\": \"mastercode-1001\",\n  \"brokerageType\": \"per_crore\", // or \"per_sauda\"\n  \"brokerage\": 0.1,\n  \"clientLimit\": 50\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/var/superAdmin/add-masterAdmin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"var",
+						"superAdmin",
+						"add-masterAdmin"
+					]
+				},
+				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "Update data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful PUT request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDlmZjg0YmYzMmM0MGQ1Mjg5NGE5MSIsImlhdCI6MTcxNzA4MDg3MiwiZXhwIjoxNzE3MjUzNjcyfQ.kMIm3EM5uHAcTZeqDIdlETUtHAeXMSJwgfUxvdCCG2E",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"oldPassword\": \"clientsira@123\",\n    \"newPassword\":\"client@123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/var/client/change-Password/6649ff84bf32c40d52894a91",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"var",
+						"client",
+						"change-Password",
+						"6649ff84bf32c40d52894a91"
+					]
+				},
+				"description": "This is a PUT request and it is used to overwrite an existing piece of data. For instance, after you create an entity with a POST request, you may want to modify that later. You can do that using a PUT request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful PUT request typically returns a `200 OK`, `201 Created`, or `204 No Content` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "Delete data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Successful DELETE request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 202, 204]);",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/info?id=1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"info"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				},
+				"description": "This is a DELETE request, and it is used to delete data that was previously created via a POST request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful DELETE request typically returns a `200 OK`, `202 Accepted`, or `204 No Content` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "superadminlogin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n     \"super_admin_id\":\"superadmin-2548\",\n     \"password\":\"superadmin@123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/var/superAdmin/superAdminLogin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"var",
+						"superAdmin",
+						"superAdminLogin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addclient",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDlkYWYwNThlYTg3MjAxMzE3MDNhNCIsImlhdCI6MTcxNjExOTEyMSwiZXhwIjoxNzE2MjkxOTIxfQ.qttb1NZ6RrqnMQpFluInBFAzVKrKtp66cGwDIsUFeH0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"clientneha\",\n  \"password\": \"clientneha@123\",\n  \"budget\": 5000000,\n  \"availableBudget\": 4500000,\n  \"allotedBudget\": 500000,\n  \"status\": \"active\",\n  \"clientCode\": \"abc1\",\n  \"brokerageType\": \"per_crore\", // or \"per_sauda\"\n  \"brokerage\": 0.1\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/var/masterAdmin/add-client",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"var",
+						"masterAdmin",
+						"add-client"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addmasteradmin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDlkYWYwNThlYTg3MjAxMzE3MDNhNCIsImlhdCI6MTcxNjExOTEyMSwiZXhwIjoxNzE2MjkxOTIxfQ.qttb1NZ6RrqnMQpFluInBFAzVKrKtp66cGwDIsUFeH0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"masteradmin1\",\n  \"password\": \"masteradmin@123\",\n  \"budget\": 5000000,\n  \"availableBudget\": 4500000,\n  \"allotedBudget\": 500000,\n  \"status\": \"active\",\n  \"masterCode\": \"mastercode-1001\",\n  \"brokerageType\": \"per_crore\", // or \"per_sauda\"\n  \"brokerage\": 0.1,\n  \"clientLimit\": 50\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/var/superAdmin/add-masterAdmin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"var",
+						"superAdmin",
+						"add-masterAdmin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update masteradmin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful PUT request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDlkYWYwNThlYTg3MjAxMzE3MDNhNCIsImlhdCI6MTcxNjExOTEyMSwiZXhwIjoxNzE2MjkxOTIxfQ.qttb1NZ6RrqnMQpFluInBFAzVKrKtp66cGwDIsUFeH0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"neha\",\n  \"password\": \"neha@123\",\n  \"budget\": 8000000,\n  \"availableBudget\": 4500000,\n  \"allotedBudget\": 500000,\n  \"status\": \"active\",\n  \"masterCode\": \"mastercode-1001\",\n  \"brokerageType\": \"per_crore\", // or \"per_sauda\"\n  \"brokerage\": 0.5,\n  \"clientLimit\": 20\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/var/superAdmin/update-masterAdmin/6649f561d4833761b29f050a",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"var",
+						"superAdmin",
+						"update-masterAdmin",
+						"6649f561d4833761b29f050a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete masteradmin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful DELETE request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 202, 204]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDlkYWYwNThlYTg3MjAxMzE3MDNhNCIsImlhdCI6MTcxNjExOTEyMSwiZXhwIjoxNzE2MjkxOTIxfQ.qttb1NZ6RrqnMQpFluInBFAzVKrKtp66cGwDIsUFeH0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/var/superAdmin/delete-masterAdmin/6649f866d4833761b29f050d",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"var",
+						"superAdmin",
+						"delete-masterAdmin",
+						"6649f866d4833761b29f050d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "loginmasteradmin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDlkYWYwNThlYTg3MjAxMzE3MDNhNCIsImlhdCI6MTcxNjExOTEyMSwiZXhwIjoxNzE2MjkxOTIxfQ.qttb1NZ6RrqnMQpFluInBFAzVKrKtp66cGwDIsUFeH0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"master_admin_id\": \"masteradmin2-3255\",\n  \"password\": \"masteradmin@123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/var/masterAdmin/masterAdminLogin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"var",
+						"masterAdmin",
+						"masterAdminLogin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Updateclient",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful PUT request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDlkYWYwNThlYTg3MjAxMzE3MDNhNCIsImlhdCI6MTcxNjExOTEyMSwiZXhwIjoxNzE2MjkxOTIxfQ.qttb1NZ6RrqnMQpFluInBFAzVKrKtp66cGwDIsUFeH0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"trade\",\n  \"budget\": 9000000,\n  \"availableBudget\": 4500000,\n  \"allotedBudget\": 500000,\n  \"status\": \"active\",\n  \"clientCode\": \"abc3\",\n  \"brokerageType\": \"per_sauda\",\n  \"brokerage\": 0.1\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/var/masterAdmin/update-client/664a0076bf32c40d52894a94\n\n",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"var",
+						"masterAdmin",
+						"update-client",
+						"664a0076bf32c40d52894a94\n\n"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteclient",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful DELETE request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 202, 204]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDlkYWYwNThlYTg3MjAxMzE3MDNhNCIsImlhdCI6MTcxNjExOTEyMSwiZXhwIjoxNzE2MjkxOTIxfQ.qttb1NZ6RrqnMQpFluInBFAzVKrKtp66cGwDIsUFeH0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/var/masterAdmin/delete-client/664a0076bf32c40d52894a94\n\n",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"var",
+						"masterAdmin",
+						"delete-client",
+						"664a0076bf32c40d52894a94\n\n"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "clientLogin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDlkYWYwNThlYTg3MjAxMzE3MDNhNCIsImlhdCI6MTcxNjExOTEyMSwiZXhwIjoxNzE2MjkxOTIxfQ.qttb1NZ6RrqnMQpFluInBFAzVKrKtp66cGwDIsUFeH0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"client_id\": \"clientneha-3839\",\n  \"password\": \"clientneha@123\"\n  \n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/var/client/clientLogin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"var",
+						"client",
+						"clientLogin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "changeclientpassword",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful PUT request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTkyMGU5MDRhMDExMzU5MzIxYzIwNyIsImlhdCI6MTcxNzM0MTg5NCwiZXhwIjoxNzE3NTE0Njk0fQ.SyiJuzVrzAV8Bv8KV__aKZ4fldr7NRUJA8RVPpjSgSI",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"oldPassword\":\"client@123\",\n    \"newPassword\":\"myclient@123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/var/client/change-Password/665920e904a011359321c207",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"var",
+						"client",
+						"change-Password",
+						"665920e904a011359321c207"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get superAdmin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/var/superAdmin/getSuperAdmin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"var",
+						"superAdmin",
+						"getSuperAdmin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Master Admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/var/masterAdmin/getMasterAdmin/66591b00099e42a21d4c210b",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"var",
+						"masterAdmin",
+						"getMasterAdmin",
+						"66591b00099e42a21d4c210b"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllClients",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/var/masterAdmin/getAllClients\n\n",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"var",
+						"masterAdmin",
+						"getAllClients\n\n"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetClientbyId",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/var/masterAdmin/getClient/665920e904a011359321c207\n\n",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"var",
+						"masterAdmin",
+						"getClient",
+						"665920e904a011359321c207\n\n"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Master Admin by Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/var/superAdmin/getMasterAdmin/66591b00099e42a21d4c210b",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"var",
+						"superAdmin",
+						"getMasterAdmin",
+						"66591b00099e42a21d4c210b"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "changeMasterAdminPassword",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful PUT request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDlmZTFjYjlhNWExODI4MmQ2M2RiNyIsImlhdCI6MTcxNzA4NDg3MywiZXhwIjoxNzE3MjU3NjczfQ.kCRaoNcur5oRu_wUZyTtGZ4Ql4fNhn8n6YpHa07iqwg",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"oldPassword\": \"masteradmin@123\",\n    \"newPassword\":\"master@123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/var/masterAdmin/change-Password/6649f561d4833761b29f050a",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"var",
+						"masterAdmin",
+						"change-Password",
+						"6649f561d4833761b29f050a"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "1"
+		},
+		{
+			"key": "base_url",
+			"value": "https://postman-rest-api-learner.glitch.me/"
+		}
+	]
+}
