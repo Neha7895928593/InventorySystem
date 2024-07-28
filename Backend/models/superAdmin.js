@@ -2,10 +2,14 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const superAdminSchema = new Schema({
+  
+
   super_admin_id: {
     type: String,
+    
     unique: true,
   },
+  
   username: {
     type: String,
     required: true,
@@ -15,9 +19,9 @@ const superAdminSchema = new Schema({
     type: String,
     required: true,
   },
-  master_admins: [{
+  dealers: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'MasterAdmin',
+    ref: 'Dealers',
     default: [],
   }],
 
