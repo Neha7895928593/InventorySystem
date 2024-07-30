@@ -111,7 +111,7 @@ const getBrandsWithCategories = async (req, res) => {
   try {
     const brands = await Brand.find().populate('models');
 
-    res.status(200).json({ success: true, brands });
+    res.json(brands);
   } catch (error) {
     console.error('Error fetching brands with categories:', error);
     res.status(500).json({ success: false, message: 'An error occurred' });
