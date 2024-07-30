@@ -35,7 +35,7 @@ router.get('/brands', getBrandsWithCategories);
 router.post('/categories', checkLogin, addCategory);
 router.put('/categories/:categoryId/price', checkLogin, editCategoryPrice);
 router.delete('/categories/:categoryId', checkLogin, deleteCategory);
-router.get('/brands/:brandId/categories', getCategoriesForBrand);
+router.get('/brands/:brandName/categories', getCategoriesForBrand);
 router.get('/categories', getAllCategories);
 
 // Sales and Purchases Routes

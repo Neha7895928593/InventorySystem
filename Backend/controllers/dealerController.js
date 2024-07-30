@@ -175,21 +175,17 @@ const addCategory = async (req, res) => {
 
 
 
-const getCategoriesForBrand = async (req, res) => {
-  try {
-    const { brandId } = req.params;
-
-    const categories = await Category.find({ sbrand: brandId }).populate('brand');
-    if (!categories.length) {
-      return res.status(404).json({ success: false, message: 'No categories found for this brand' });
+const getCategoriesForBrand =  async (req, res) => {
+    const { brandName } = req.params;
+  
+    try {
+      const categories = await Category.find({ brand: brandName });
+      res.json(categories);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      res.status(500).json({ message: 'Server error' });
     }
-
-    res.status(200).json({ success: true, categories });
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-    res.status(500).json({ success: false, message: 'An error occurred' });
-  }
-};
+  };
 
 
 const getAllCategories = async (req, res) => {
