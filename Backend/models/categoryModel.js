@@ -7,8 +7,8 @@ const categorySchema = new Schema({
     required: true,
   },
   brand: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Brand',
+    type: String,
+  
     required: true,
   },
   amount: {

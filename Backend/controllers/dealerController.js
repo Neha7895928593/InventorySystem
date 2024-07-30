@@ -142,18 +142,18 @@ const deleteBrand = async (req, res) => {
 
 const addCategory = async (req, res) => {
   try {
-    const { modelNo, brandId, amount } = req.body;
+    const { modelNo, brand, amount} = req.body;
     const dealerId = req.user._id; 
 
     // Check if the brand exists
-    const brand = await Brand.findById(brandId);
-    if (!brand) {
-      return res.status(404).json({ success: false, message: 'Brand not found' });
-    }
+    // const brand= await Brand.findById(brandId);
+    // if (!brand) {
+    //   return res.status(404).json({ success: false, message: 'Brand not found' });
+    // }
 
     const newCategory = new Category({
       modelNo,
-      brand: brand._id,
+      brand,
       amount
     });
 
