@@ -91,6 +91,22 @@ const addDealer = async (req, res) => {
   }
 };
 
+const getDealerById= async (req, res) => {
+  try {
+    const dealerId = req.params.id;
+    const dealer = await dealersModel.findById(dealerId).populate('sales').populate('purchases');
+
+    if (!dealer) {
+      return res.status(404).json({ message: 'Dealer not found' });
+    }
+
+    res.status(200).json(dealer);
+  } catch (error) {
+    console.error('Error fetching dealer:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 
 
 
@@ -128,4 +144,4 @@ const deleteDealer = async (req, res) => {
 
 
 
-module.exports = {superAdminLogin,addDealer,deleteDealer }
+module.exports = {superAdminLogin,addDealer,deleteDealer ,getDealerById}
