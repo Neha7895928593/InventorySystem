@@ -142,27 +142,27 @@ const deleteBrand = async (req, res) => {
 
 const addCategory = async (req, res) => {
   try {
-    const { modelNo, brand, amount} = req.body;
-    const dealerId = req.user._id; 
+    const { modelNo, brand: brandName, amount } = req.body;
+    const dealerId = req.user._id;
 
-    // Check if the brand exists
-    // const brand= await Brand.findById(brandId);
-    // if (!brand) {
-    //   return res.status(404).json({ success: false, message: 'Brand not found' });
-    // }
+    // Find the brand by name
+    const brand = await Brand.findOne({ name: brandName });
+    if (!brand) {
+      return res.status(404).json({ success: false, message: 'Brand not found' });
+    }
 
+    // Create and save the new category
     const newCategory = new Category({
       modelNo,
-      brand,
+      brand: brandName,  // Use the brand name as it's stored in your Category schema
       amount
     });
 
     await newCategory.save();
 
-    // Add the category to the brand's models array
+    // Add the new category to the brand's models array
     brand.models.push(newCategory._id);
     await brand.save();
-
 
     res.status(201).json({ success: true, message: 'Category added successfully', newCategory });
   } catch (error) {
@@ -170,6 +170,7 @@ const addCategory = async (req, res) => {
     res.status(500).json({ success: false, message: 'An error occurred' });
   }
 };
+
 
 
 
