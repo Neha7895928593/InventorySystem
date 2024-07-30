@@ -5,6 +5,7 @@ const Brand = require('../models/brandModel');
 const Sale = require('../models/salesModel');
 const Purchase = require('../models/purchaseModel');
 const Category = require('../models/categoryModel');
+const mongoose=require('mongoose')
 
 
 const dotenv=require('dotenv')
@@ -226,6 +227,11 @@ const editCategoryPrice = async (req, res) => {
   const deleteCategory = async (req, res) => {
     try {
       const { categoryId } = req.params;
+  
+      // Ensure categoryId is a valid ObjectId
+      if (!mongoose.Types.ObjectId.isValid(categoryId)) {
+        return res.status(400).json({ success: false, message: 'Invalid category ID' });
+      }
   
       const category = await Category.findByIdAndDelete(categoryId);
       if (!category) {
