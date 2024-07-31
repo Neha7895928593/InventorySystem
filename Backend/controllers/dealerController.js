@@ -249,27 +249,27 @@ const editCategoryPrice = async (req, res) => {
   };
   
 
-  
+ 
   const addSale = async (req, res) => {
     try {
-      const { brandId, categoryId, quantity, date } = req.body;
+      const { brand, category: modelNo, quantity, date } = req.body;
       const dealerId = req.user._id;
   
-      // Find the category based on categoryId
-      const category = await Category.findById(categoryId);
-      if (!category) {
-        return res.status(404).json({ success: false, message: 'Category not found' });
-      }
-  
-      // Check if the category belongs to the specified brand
-      if (category.brand.toString() !== brandId) {
-        return res.status(400).json({ success: false, message: 'Category does not belong to the specified brand' });
-      }
-  
-      // Fetch the dealer to check stock quantity and amount
+      // Fetch the dealer to update stock quantity and amount
       const dealer = await Dealer.findById(dealerId);
       if (!dealer) {
         return res.status(404).json({ success: false, message: 'Dealer not found' });
+      }
+  
+      // Find the category based on brand and modelNo
+      const categoryData = await Category.findOne({ brand, modelNo });
+      if (!categoryData) {
+        return res.status(404).json({ success: false, message: 'Category not found' });
+      }
+  
+      const amount = categoryData.amount; // Ensure categoryData has the amount field
+      if (isNaN(amount)) {
+        return res.status(400).json({ success: false, message: 'Invalid category amount' });
       }
   
       // Check if the dealer has enough stock quantity
@@ -279,9 +279,8 @@ const editCategoryPrice = async (req, res) => {
   
       // Create a new sale
       const newSale = new Sale({
-        dealer: dealerId,
-        brand: brandId,
-        category: category._id,
+        brand,
+        category: modelNo, // Use modelNo here
         quantity,
         date
       });
@@ -290,11 +289,11 @@ const editCategoryPrice = async (req, res) => {
   
       // Update dealer's stock quantity and amount
       dealer.totalStockQuantity -= quantity;
-      dealer.totalStockAmount -= category.amount * quantity;
+      dealer.totalStockAmount -= amount * quantity;
   
       // Add sale to dealer's sales array
       dealer.sales.push(newSale._id);
-      
+  
       await dealer.save();
   
       res.status(201).json({ success: true, message: 'Sale added successfully', newSale });
@@ -303,6 +302,7 @@ const editCategoryPrice = async (req, res) => {
       res.status(500).json({ success: false, message: 'An error occurred' });
     }
   };
+  
   
   
   
@@ -327,29 +327,32 @@ const editCategoryPrice = async (req, res) => {
 
 
 
-
-
   const addPurchase = async (req, res) => {
     try {
-      const { brandId, categoryId, quantity, date } = req.body;
+      const { brand, category:modelNo, quantity, date } = req.body;
       const dealerId = req.user._id;
   
-      // Find the category based on brandId and categoryId
-      const category = await Category.findOne({ brand: brandId, _id: categoryId });
-      if (!category) {
-        return res.status(404).json({ success: false, message: 'Category not found' });
-      }
-  
+      // Fetch the dealer to update stock quantity and amount
       const dealer = await Dealer.findById(dealerId);
       if (!dealer) {
         return res.status(404).json({ success: false, message: 'Dealer not found' });
       }
   
+      // Assuming `category` contains the amount for calculation
+      const categoryData = await Category.findOne({ brand, modelNo: category });
+      if (!categoryData) {
+        return res.status(404).json({ success: false, message: 'Category not found' });
+      }
+  
+      const amount = categoryData.amount; // Assuming categoryData has the amount field
+      if (isNaN(amount)) {
+        return res.status(400).json({ success: false, message: 'Invalid category amount' });
+      }
+  
       // Create a new purchase
       const newPurchase = new Purchase({
-        dealer: dealerId,
-        brand: brandId,
-        category: category._id,
+        brand,
+        category:modelNo,
         quantity,
         date
       });
@@ -358,7 +361,7 @@ const editCategoryPrice = async (req, res) => {
   
       // Update dealer's stock quantity and amount
       dealer.totalStockQuantity += quantity;
-      dealer.totalStockAmount += category.amount * quantity;
+      dealer.totalStockAmount += amount * quantity;
   
       // Add purchase to dealer's purchases array
       dealer.purchases.push(newPurchase._id);
@@ -372,7 +375,8 @@ const editCategoryPrice = async (req, res) => {
     }
   };
   
- 
+
+  
   
     
   const getPurchases = async (req, res) => {
