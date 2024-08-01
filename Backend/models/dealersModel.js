@@ -11,11 +11,7 @@ const dealerSchema = new Schema({
     type: String,
     required: true,
   },
-  dealerId: {
-    type: String,
-    required: true,
-    unique: true,
-  },
+  
   totalStockQuantity: {
     type: Number,
     default: 0,

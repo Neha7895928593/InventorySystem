@@ -58,11 +58,10 @@ const addDealer = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Generate a unique dealer ID using the custom function
-    const dealerId = generateId(username);
+   
 
     // Create a new dealer
     const newDealer = new dealersModel({
-      dealerId,
       username,
       password: hashedPassword,
       brands: [],

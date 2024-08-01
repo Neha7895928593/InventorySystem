@@ -12,18 +12,18 @@ const dotenv=require('dotenv')
 dotenv.config();
 const dealerLogin = async (req, res) => {
   try {
-    const { dealerId, password } = req.body;
+    const { username, password } = req.body;
 
-    // Find the dealer by dealerId
-    const dealer = await Dealer.findOne({ dealerId });
+    // Find the dealer by username
+    const dealer = await Dealer.findOne({ username });
     if (!dealer) {
-      return res.status(401).json({ success: false, message: 'Invalid dealer ID or password' });
+      return res.status(401).json({ success: false, message: 'Invalid username or password' });
     }
 
     // Compare the provided password with the stored hashed password
     const isPasswordValid = await bcrypt.compare(password, dealer.password);
     if (!isPasswordValid) {
-      return res.status(401).json({ success: false, message: 'Invalid dealer ID or password' });
+      return res.status(401).json({ success: false, message: 'Invalid username or password' });
     }
 
     // Generate a JWT token
@@ -32,9 +32,10 @@ const dealerLogin = async (req, res) => {
     return res.json({ success: true, message: 'Dealer logged in successfully', token });
   } catch (error) {
     console.error('Error in dealer login:', error);
-    return res.status(500).json({ success: false, message: 'An error occurred' });
+    return res.status(500).json({ success: false, message: 'An error occurred during login. Please try again later.' });
   }
 };
+
 
 
 const changeDealerPassword = async (req, res) => {
@@ -162,8 +163,7 @@ const addCategory = async (req, res) => {
     await newCategory.save();
 
     // Add the new category to the brand's models array
-    brand.models.push(newCategory._id);
-    await brand.save();
+    
 
     res.status(201).json({ success: true, message: 'Category added successfully', newCategory });
   } catch (error) {
@@ -224,6 +224,7 @@ const editCategoryPrice = async (req, res) => {
 
   
   
+  
   const deleteCategory = async (req, res) => {
     try {
       const { categoryId } = req.params;
@@ -233,13 +234,11 @@ const editCategoryPrice = async (req, res) => {
         return res.status(400).json({ success: false, message: 'Invalid category ID' });
       }
   
+      // Find and delete the category by ID
       const category = await Category.findByIdAndDelete(categoryId);
       if (!category) {
         return res.status(404).json({ success: false, message: 'Category not found' });
       }
-  
-      // Remove the category reference from the brand's models array
-      await Brand.findByIdAndUpdate(category.brand, { $pull: { models: category._id } });
   
       res.status(200).json({ success: true, message: 'Category deleted successfully' });
     } catch (error) {
@@ -248,6 +247,7 @@ const editCategoryPrice = async (req, res) => {
     }
   };
   
+
 
  
   const addSale = async (req, res) => {
@@ -316,7 +316,7 @@ const editCategoryPrice = async (req, res) => {
   const getSales = async (req, res) => {
     try {
       const dealerId = req.user._id;
-      const sales = await Sale.find({ dealer: dealerId }).populate('brand category');
+      const sales = await Sale.find({ dealer: dealerId })
       res.status(200).json({ success: true, sales });
     } catch (error) {
       console.error('Error fetching sales:', error);
@@ -329,30 +329,39 @@ const editCategoryPrice = async (req, res) => {
 
   const addPurchase = async (req, res) => {
     try {
-      const { brand, category:modelNo, quantity, date } = req.body;
+      const { brand, category: modelNo, quantity, date } = req.body;
       const dealerId = req.user._id;
   
-      // Fetch the dealer to update stock quantity and amount
+      // Input validation
+      if (!brand || !modelNo || !quantity || !date) {
+        return res.status(400).json({ success: false, message: 'All fields are required' });
+      }
+  
+      if (isNaN(quantity) || quantity <= 0) {
+        return res.status(400).json({ success: false, message: 'Invalid quantity' });
+      }
+  
+      // Fetch the dealer
       const dealer = await Dealer.findById(dealerId);
       if (!dealer) {
         return res.status(404).json({ success: false, message: 'Dealer not found' });
       }
   
-      // Assuming `category` contains the amount for calculation
-      const categoryData = await Category.findOne({ brand, modelNo: category });
+      // Fetch the category based on brand and modelNo
+      const categoryData = await Category.findOne({ brand, modelNo });
       if (!categoryData) {
         return res.status(404).json({ success: false, message: 'Category not found' });
       }
   
-      const amount = categoryData.amount; // Assuming categoryData has the amount field
-      if (isNaN(amount)) {
+      const amount = categoryData.amount;
+      if (isNaN(amount) || amount <= 0) {
         return res.status(400).json({ success: false, message: 'Invalid category amount' });
       }
   
       // Create a new purchase
       const newPurchase = new Purchase({
         brand,
-        category:modelNo,
+        category: modelNo,
         quantity,
         date
       });
@@ -365,7 +374,7 @@ const editCategoryPrice = async (req, res) => {
   
       // Add purchase to dealer's purchases array
       dealer.purchases.push(newPurchase._id);
-      
+  
       await dealer.save();
   
       res.status(201).json({ success: true, message: 'Purchase added successfully', newPurchase });
@@ -382,7 +391,7 @@ const editCategoryPrice = async (req, res) => {
   const getPurchases = async (req, res) => {
     try {
       const dealerId = req.user._id;
-      const purchases = await Purchase.find({ dealer: dealerId }).populate('brand category');
+      const purchases = await Purchase.find({ dealer: dealerId })
       res.status(200).json({ success: true, purchases });
     } catch (error) {
       console.error('Error fetching purchases:', error);

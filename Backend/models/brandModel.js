@@ -7,11 +7,7 @@ const brandSchema = new Schema({
     required: true,
     unique: true,
   },
-  models: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category',
-    default: [],
-  }],
+  
 }, {
   timestamps: true,
 });
