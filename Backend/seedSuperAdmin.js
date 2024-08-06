@@ -5,10 +5,7 @@ const dotenv=require('dotenv')
 
 dotenv.config();
 
-const generateId = (username) => {
-    const randomDigits = Math.floor(1000 + Math.random() * 9000); 
-    return `${username}-${randomDigits}`;
-  };
+
   
 
 
@@ -23,12 +20,12 @@ const seedSuperAdmin = async () => {
           });
         
 
-        const existingSuperAdmin = await SuperAdmin.findOne({ username: 'superadmin123' });
+        const existingSuperAdmin = await SuperAdmin.findOne({ username: 'superadmin' });
         if (!existingSuperAdmin) {
             const hashedPassword = await bcrypt.hash('superadmin@123', 10);
             const superAdmin = new SuperAdmin({
-                super_admin_id: generateId('superadmin'),
-                username: 'superadmin123',
+                
+                username: 'superadmin',
                 password: hashedPassword
             });
             await superAdmin.save();

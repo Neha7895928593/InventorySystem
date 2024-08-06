@@ -12,29 +12,33 @@ const dotenv=require('dotenv')
 dotenv.config();
 const dealerLogin = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    // Find the dealer by username
-    const dealer = await Dealer.findOne({ username });
+    // Find the dealer by email
+    const dealer = await Dealer.findOne({ email });
     if (!dealer) {
-      return res.status(401).json({ success: false, message: 'Invalid username or password' });
+      return res.status(401).json({ success: false, message: 'Invalid email or password' });
     }
 
     // Compare the provided password with the stored hashed password
     const isPasswordValid = await bcrypt.compare(password, dealer.password);
     if (!isPasswordValid) {
-      return res.status(401).json({ success: false, message: 'Invalid username or password' });
+      return res.status(401).json({ success: false, message: 'Invalid email or password' });
     }
 
     // Generate a JWT token
     const token = jwt.sign({ id: dealer._id }, process.env.SECRET_KEY, { expiresIn: '7d' });
 
-    return res.json({ success: true, message: 'Dealer logged in successfully', token });
+    // Exclude sensitive information before sending the dealer object
+    const { password: _, ...dealerWithoutPassword } = dealer.toObject();
+
+    return res.json({ success: true, message: 'Dealer logged in successfully', token, dealer: dealerWithoutPassword });
   } catch (error) {
     console.error('Error in dealer login:', error);
     return res.status(500).json({ success: false, message: 'An error occurred during login. Please try again later.' });
   }
 };
+
 
 
 
@@ -111,7 +115,7 @@ const addBrand = async (req, res) => {
 
 const getBrandsWithCategories = async (req, res) => {
   try {
-    const brands = await Brand.find().populate('models');
+    const brands = await Brand.find()
 
     res.json(brands);
   } catch (error) {
@@ -131,7 +135,7 @@ const deleteBrand = async (req, res) => {
     }
 
     // Delete all categories associated with this brand
-    await Category.deleteMany({ brand: brand._id });
+    await Category.deleteMany({ brand: brand.name});
 
     res.status(200).json({ success: true, message: 'Brand and associated categories deleted successfully' });
   } catch (error) {
@@ -140,6 +144,33 @@ const deleteBrand = async (req, res) => {
   }
 };
 
+const updateBrandName = async (req, res) => {
+  try {
+      const { brandId } = req.params;
+      const { newName } = req.body;
+
+      // Find the brand by ID
+      const brand = await Brand.findById(brandId);
+      if (!brand) {
+          return res.status(404).json({ success: false, message: 'Brand not found' });
+      }
+
+      // Store the old brand name for updating categories
+      const oldName = brand.name;
+
+      // Update the brand name
+      brand.name = newName;
+      await brand.save();
+
+      // Update all categories associated with this brand
+      await Category.updateMany({ brand: oldName }, { brand: newName });
+
+      res.status(200).json({ success: true, message: 'Brand name updated successfully' });
+  } catch (error) {
+      console.error('Error updating brand name:', error);
+      res.status(500).json({ success: false, message: 'An error occurred' });
+  }
+};
 
 
 const addCategory = async (req, res) => {
@@ -240,14 +271,23 @@ const editCategoryPrice = async (req, res) => {
         return res.status(404).json({ success: false, message: 'Category not found' });
       }
   
-      res.status(200).json({ success: true, message: 'Category deleted successfully' });
+      // Find the associated brand by brand name
+      const brandName = category.brand;
+      const remainingCategories = await Category.find({ brand: brandName });
+  
+      if (remainingCategories.length === 0) {
+        // If no remaining categories for the brand, delete the brand
+        await Brand.findOneAndDelete({ name: brandName });
+      }
+  
+      res.status(200).json({ success: true, message: 'Category and possibly associated brand deleted successfully' });
     } catch (error) {
       console.error('Error deleting category:', error);
       res.status(500).json({ success: false, message: 'An error occurred' });
     }
   };
   
-
+  
 
  
   const addSale = async (req, res) => {
@@ -401,10 +441,105 @@ const editCategoryPrice = async (req, res) => {
 
 
 
+const getBrandWisePerformance = async (req, res) => {
+  try {
+    const { filter, customStartDate, customEndDate } = req.body;
+    
+    // Define date range based on filter
+    let startDate, endDate;
+    const now = new Date();
+    
+    switch (filter) {
+      case 'lastWeek':
+        startDate = new Date();
+        startDate.setDate(now.getDate() - 7);
+        endDate = now;
+        break;
+      case 'monthly':
+        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+        break;
+      case 'quarterly':
+        const quarter = Math.floor(now.getMonth() / 3) * 3;
+        startDate = new Date(now.getFullYear(), quarter, 1);
+        endDate = new Date(now.getFullYear(), quarter + 3, 0);
+        break;
+      case 'yearly':
+        startDate = new Date(now.getFullYear(), 0, 1);
+        endDate = new Date(now.getFullYear() + 1, 0, 0);
+        break;
+      case 'lifetime':
+        startDate = new Date(0); // Epoch time
+        endDate = now;
+        break;
+      case 'custom':
+        if (!customStartDate || !customEndDate) {
+          return res.status(400).json({ success: false, message: 'Custom date range requires both startDate and endDate.' });
+        }
+        startDate = new Date(customStartDate);
+        endDate = new Date(customEndDate);
+        break;
+      default:
+        return res.status(400).json({ success: false, message: 'Invalid filter type' });
+    }
+
+    // Get sales and purchases within the date range
+    const [sales, purchases] = await Promise.all([
+      Sale.aggregate([
+        { $match: { date: { $gte: startDate, $lte: endDate } } },
+        { $group: { _id: { brand: '$brand' }, totalQuantity: { $sum: '$quantity' } } }
+      ]),
+      Purchase.aggregate([
+        { $match: { date: { $gte: startDate, $lte: endDate } } },
+        { $group: { _id: { brand: '$brand' }, totalQuantity: { $sum: '$quantity' } } }
+      ])
+    ]);
+
+    // Initialize the performance data object
+    const brandPerformance = {};
+
+    // Process sales data
+    for (const sale of sales) {
+      const { _id: { brand }, totalQuantity } = sale;
+      if (!brandPerformance[brand]) {
+        brandPerformance[brand] = { totalQuantity: 0, totalAmount: 0 };
+      }
+      brandPerformance[brand].totalQuantity += totalQuantity;
+    }
+
+    // Process purchases data
+    for (const purchase of purchases) {
+      const { _id: { brand }, totalQuantity } = purchase;
+      if (!brandPerformance[brand]) {
+        brandPerformance[brand] = { totalQuantity: 0, totalAmount: 0 };
+      }
+      brandPerformance[brand].totalQuantity += totalQuantity;
+    }
+
+    // Add total amount based on category
+    const categories = await Category.find({ brand: { $in: Object.keys(brandPerformance) } });
+    categories.forEach(category => {
+      const { brand, modelNo, amount } = category;
+      if (brandPerformance[brand]) {
+        brandPerformance[brand].totalAmount += brandPerformance[brand].totalQuantity * amount;
+      }
+    });
+
+    res.status(200).json({ success: true, data: brandPerformance });
+  } catch (error) {
+    console.error('Error fetching brand-wise performance:', error);
+    res.status(500).json({ success: false, message: 'An error occurred while fetching brand-wise performance' });
+  }
+};
 
 
 
 
-module.exports = { dealerLogin , changeDealerPassword, addBrand,
+
+
+
+
+
+module.exports = { dealerLogin , changeDealerPassword, addBrand, updateBrandName,
      deleteBrand, getBrandsWithCategories, addCategory,editCategoryPrice,deleteCategory,
-     getCategoriesForBrand, getAllCategories,addSale,  getSales, addPurchase, getPurchases };
+     getCategoriesForBrand, getAllCategories,addSale,  getSales, addPurchase, getPurchases,getBrandWisePerformance };

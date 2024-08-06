@@ -1,17 +1,7 @@
-
 const dealersModel = require('../models/dealersModel');
-
-const SuperAdmin=require('../models/superAdmin')
+const SuperAdmin = require('../models/superAdmin');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
-
-const generateId = (username) => {
-  const randomDigits = Math.floor(1000 + Math.random() * 9000); 
-  return `${username}-${randomDigits}`;
-};
-
-
 
 const superAdminLogin = async (req, res) => {
   try {
@@ -36,20 +26,12 @@ const superAdminLogin = async (req, res) => {
   }
 };
 
-
-
-
-// Function for add  dealer
- 
-
-
 const addDealer = async (req, res) => {
   try {
-    const { username, password } = req.body;
-    const superAdminId = req.user._id; // Assuming the superadmin's ID is available in req.user
+    const { username, email, password } = req.body;
 
     // Check if the dealer already exists
-    const existingDealer = await dealersModel.findOne({ username });
+    const existingDealer = await dealersModel.findOne({ email });
     if (existingDealer) {
       return res.status(400).json({ success: false, message: 'Dealer already exists' });
     }
@@ -57,11 +39,9 @@ const addDealer = async (req, res) => {
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Generate a unique dealer ID using the custom function
-   
-
     // Create a new dealer
     const newDealer = new dealersModel({
+      email,
       username,
       password: hashedPassword,
       brands: [],
@@ -69,19 +49,7 @@ const addDealer = async (req, res) => {
     });
 
     // Save the new dealer to the database
-    
-    // Find the superadmin and update their dealers array
-    const superAdmin = await SuperAdmin.findById(superAdminId);
-    if (!superAdmin) {
-      return res.status(404).json({ success: false, message: 'SuperAdmin not found' });
-
-    }
     await newDealer.save();
-
-      
-    console.log(newDealer._id)
-    superAdmin.dealers.push(newDealer._id);
-    await superAdmin.save();
 
     return res.status(201).json({ success: true, message: 'Dealer created successfully', newDealer });
   } catch (error) {
@@ -90,10 +58,11 @@ const addDealer = async (req, res) => {
   }
 };
 
-const getDealerById= async (req, res) => {
+
+const getDealerById = async (req, res) => {
   try {
-    const dealerId = req.params.id;
-    const dealer = await dealersModel.findById(dealerId).populate('sales').populate('purchases');
+    
+    const dealer = await dealersModel.find()
 
     if (!dealer) {
       return res.status(404).json({ message: 'Dealer not found' });
@@ -106,17 +75,13 @@ const getDealerById= async (req, res) => {
   }
 };
 
-
-
-
-
 const deleteDealer = async (req, res) => {
   try {
     const { dealerId } = req.params;
-    const superAdminId = req.user._id; 
+    const superAdminId = req.user._id;
 
     // Find and delete the dealer
-    const deletedDealer = await Dealer.findOneAndDelete({ dealerId });
+    const deletedDealer = await dealersModel.findByIdAndDelete(dealerId);
     if (!deletedDealer) {
       return res.status(404).json({ success: false, message: 'Dealer not found' });
     }
@@ -127,7 +92,6 @@ const deleteDealer = async (req, res) => {
       return res.status(404).json({ success: false, message: 'SuperAdmin not found' });
     }
 
-    
     superAdmin.dealers = superAdmin.dealers.filter(dealer => dealer.toString() !== deletedDealer._id.toString());
     await superAdmin.save();
 
@@ -138,9 +102,4 @@ const deleteDealer = async (req, res) => {
   }
 };
 
-
-
-
-
-
-module.exports = {superAdminLogin,addDealer,deleteDealer ,getDealerById}
+module.exports = { superAdminLogin, addDealer, deleteDealer, getDealerById };

@@ -6,7 +6,7 @@ const router=express.Router();
 router.post('/superAdminLogin',superAdminLogin)
 router.post('/add-dealer',   checkLogin  , addDealer );
 router.delete('/delete/:dealerId', checkLogin, deleteDealer);
-router.get('/dealers/:id',getDealerById)
+router.get('/dealers',getDealerById)
 
 
 module.exports=router

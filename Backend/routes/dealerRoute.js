@@ -17,6 +17,8 @@ const {
   getPurchases,
   changeDealerPassword,
   getAllCategories,
+  getBrandWisePerformance,
+  updateBrandName,
   // getBrandwiseData, 
   // getCategorywiseData, 
   // getBrandwiseModelData 
@@ -29,6 +31,8 @@ router.post('/login', dealerLogin);
 // Brand Routes
 router.post('/brands', checkLogin, addBrand);
 router.delete('/brands/:brandId', checkLogin, deleteBrand);
+
+router.put('/brands/:brandId',checkLogin,updateBrandName)
 router.get('/brands', getBrandsWithCategories);
 
 // Category Routes
@@ -48,7 +52,7 @@ router.get('/purchases', checkLogin, getPurchases);
 router.put('/change-password/:dealerId', checkLogin, changeDealerPassword);
 
 // // Performance Data Routes
-// router.get('/performance/brandwise', checkLogin, getBrandwiseData);
+ router.post('/performance/brandwise', checkLogin, getBrandWisePerformance);
 // router.get('/performance/categorywise', checkLogin, getCategorywiseData);
 // router.get('/performance/brandwise/:brand/models', checkLogin, getBrandwiseModelData);
 
