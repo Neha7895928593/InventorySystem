@@ -533,6 +533,137 @@ const getBrandWisePerformance = async (req, res) => {
 };
 
 
+const getStockSummary = async (req, res) => {
+  try {
+    // Fetch all purchases and sales
+    const purchases = await Purchase.find({});
+    const sales = await Sale.find({});
+
+    // Fetch all categories to get the amount for each model
+    const categories = await Category.find({});
+    const categoryMap = new Map(categories.map(cat => [`${cat.brand}-${cat.modelNo}`, cat.amount]));
+
+    // Create a map to store stock information
+    const stockMap = new Map();
+
+    // Process purchases
+    purchases.forEach(purchase => {
+      const key = `${purchase.brand}-${purchase.category}`;
+      if (!stockMap.has(key)) {
+        stockMap.set(key, { quantity: 0, amount: 0 });
+      }
+      const stock = stockMap.get(key);
+      stock.quantity += purchase.quantity;
+      // Fetch the amount from the category map
+      const amountPerUnit = categoryMap.get(key) || 0;
+      stock.amount += purchase.quantity * amountPerUnit;
+    });
+
+    // Process sales
+    sales.forEach(sale => {
+      const key = `${sale.brand}-${sale.category}`;
+      if (stockMap.has(key)) {
+        const stock = stockMap.get(key);
+        stock.quantity -= sale.quantity;
+        // Fetch the amount from the category map
+        const amountPerUnit = categoryMap.get(key) || 0;
+        stock.amount -= sale.quantity * amountPerUnit;
+      }
+    });
+
+    // Create the final stock summary
+    const stockSummary = Array.from(stockMap.entries()).map(([key, value]) => {
+      const [brand, modelNo] = key.split('-');
+      const amount = categoryMap.get(key) || 0; // Get amount from the category map
+      return { modelNo, qty: value.quantity, amount, brand };
+    });
+
+    res.status(200).json(stockSummary);
+  } catch (error) {
+    console.error('Error fetching stock summary:', error);
+    res.status(500).json({ success: false, message: 'An error occurred' });
+  }
+};
+
+
+
+
+ const viewPerformance= async (req, res) => {
+  const { filter, customStartDate, customEndDate } = req.query;
+
+  let startDate, endDate;
+
+  switch (filter) {
+    case 'lastWeek':
+      startDate = new Date();
+      startDate.setDate(startDate.getDate() - 7);
+      endDate = new Date();
+      break;
+    case 'lastMonth':
+      startDate = new Date();
+      startDate.setMonth(startDate.getMonth() - 1);
+      endDate = new Date();
+      break;
+    case 'lastQuarter':
+      startDate = new Date();
+      startDate.setMonth(startDate.getMonth() - 3);
+      endDate = new Date();
+      break;
+    case 'last6Months':
+      startDate = new Date();
+      startDate.setMonth(startDate.getMonth() - 6);
+      endDate = new Date();
+      break;
+    case 'lastYear':
+      startDate = new Date();
+      startDate.setFullYear(startDate.getFullYear() - 1);
+      endDate = new Date();
+      break;
+    case 'lifetime':
+      startDate = new Date('1970-01-01');
+      endDate = new Date();
+      break;
+    case 'custom':
+      startDate = new Date(customStartDate);
+      endDate = new Date(customEndDate);
+      break;
+    default:
+      return res.status(400).json({ error: 'Invalid filter' });
+  }
+
+  try {
+    // Fetch sales data within the date range
+    const sales = await Sale.find({
+      date: { $gte: startDate, $lte: endDate },
+    });
+
+    // Fetch all categories
+    const categories = await Category.find();
+
+    // Map categories to a dictionary for quick lookup
+    const categoryMap = categories.reduce((map, category) => {
+      map[category.modelNo] = category.amount;
+      return map;
+    }, {});
+
+    // Aggregate performance data
+    const performance = sales.reduce((acc, sale) => {
+      if (!acc[sale.category]) {
+        acc[sale.category] = {
+          totalQty: 0,
+          totalAmount: 0,
+        };
+      }
+      acc[sale.category].totalQty += sale.quantity;
+      acc[sale.category].totalAmount += (categoryMap[sale.category] || 0) * sale.quantity;
+      return acc;
+    }, {});
+
+    res.json(performance);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch performance data' });
+  }
+};
 
 
 
@@ -540,6 +671,7 @@ const getBrandWisePerformance = async (req, res) => {
 
 
 
-module.exports = { dealerLogin , changeDealerPassword, addBrand, updateBrandName,
-     deleteBrand, getBrandsWithCategories, addCategory,editCategoryPrice,deleteCategory,
+
+module.exports = { dealerLogin , changeDealerPassword, addBrand, updateBrandName, viewPerformance,
+     deleteBrand, getBrandsWithCategories, addCategory,editCategoryPrice,deleteCategory, getStockSummary,
      getCategoriesForBrand, getAllCategories,addSale,  getSales, addPurchase, getPurchases,getBrandWisePerformance };

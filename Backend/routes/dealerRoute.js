@@ -19,6 +19,8 @@ const {
   getAllCategories,
   getBrandWisePerformance,
   updateBrandName,
+  getStockSummary,
+  viewPerformance,
   // getBrandwiseData, 
   // getCategorywiseData, 
   // getBrandwiseModelData 
@@ -47,6 +49,8 @@ router.post('/sales', checkLogin, addSale);
 router.post('/purchases', checkLogin, addPurchase);
 router.get('/sales', checkLogin, getSales);
 router.get('/purchases', checkLogin, getPurchases);
+router.get('/stock-summary', checkLogin,getStockSummary);
+router.get('/performance',checkLogin,viewPerformance)
 
 // Change Dealer Password
 router.put('/change-password/:dealerId', checkLogin, changeDealerPassword);
