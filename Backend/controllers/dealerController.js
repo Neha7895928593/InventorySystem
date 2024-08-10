@@ -588,11 +588,12 @@ const getStockSummary = async (req, res) => {
 
 
 
- const viewPerformance= async (req, res) => {
-  const { filter, customStartDate, customEndDate } = req.query;
+const viewPerformance = async (req, res) => {
+  const { filter, customStartDate, customEndDate } = req.body;
 
   let startDate, endDate;
 
+  // Determine the date range based on the filter
   switch (filter) {
     case 'lastWeek':
       startDate = new Date();
@@ -659,7 +660,17 @@ const getStockSummary = async (req, res) => {
       return acc;
     }, {});
 
-    res.json(performance);
+    // Convert the performance object to an array for sorting
+    const sortedPerformance = Object.keys(performance).map(category => ({
+      category,
+      totalQty: performance[category].totalQty,
+      totalAmount: performance[category].totalAmount,
+    }));
+
+    // Sort by totalQty (highest first) or totalAmount
+    sortedPerformance.sort((a, b) => b.totalQty - a.totalQty || b.totalAmount - a.totalAmount);
+
+    res.json(sortedPerformance);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch performance data' });
   }
